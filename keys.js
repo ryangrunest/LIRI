@@ -9,3 +9,7 @@ exports.bandsInTown = {
     app_id: process.env.BANDS_IN_TOWN
 };
 
+exports.OMDB = {
+    API_KEY: process.env.OMDB
+};
+

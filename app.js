@@ -31,7 +31,6 @@ if (call === 'concert-this') {
     console.log('Searching For Events...');
     // search bandsintown api for artist events api
     axios.get(queryURL).then(function  (data) {
-        console.log(data.data);
         const returned = data.data;
         for (var i = 0; i < returned.length; i++) {
             const venue = returned[i].venue.name;
@@ -44,8 +43,6 @@ if (call === 'concert-this') {
             console.log('~~~~~~~~~~~~~~~~~~~~');
         }
     }).catch(err=>console.log(err));
-    
-    
 }
 
 
@@ -80,19 +77,38 @@ if (call === 'spotify-this-song') {
       
 }
 
-// movie-this <movie name here>
-// outputs  following info:
-// Title  of the movie,  year released, imdb rating, rotten tomatoes  rating, country produced
-// language of the movie, plot, actors in movie
-// defaults to Mr. Nobody.
-if (call === 'movie-this') {
-    let queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-    if (movieName != undefined) {
+
+// defaults to Mr. Nobody.
+// movie-this <movie name here>
+if (call === 'movie-this') {
+    let queryUrl = "http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=" + keys.OMDB.API_KEY;
+    console.log('~~~~~~~~~~~~~~~~~~~~');
+    console.log('Searching For Movie...');
+    if (searchTerm != undefined) {
         axios.get(queryUrl).then(
+            // outputs  following info:
+            // Title  of the movie,  year released, imdb rating, rotten tomatoes  rating, country produced
+            // language of the movie, plot, actors in movie
             function(response) {
-                  console.log(response.data.Title);
-                  console.log(response.data.Released);
+                const title = response.data.Title;
+                const year = response.data.Released;
+                const IMDBRating = response.data.imdbRating;
+                const RTRating = response.data.Ratings[1].Value;
+                const country = response.data.Country;
+                const language = response.data.Language;
+                const plot = response.data.Plot;
+                const actors = response.data.Actors;
+                console.log('~~~~~~~~~~~~~~~~~~~~');
+                console.log(`Title: ${title}`);
+                console.log(`Year Released: ${year}`);
+                console.log(`Plot: ${plot}`);
+                console.log(`Actors: ${actors}`);
+                console.log(`IMDB Rating: ${IMDBRating}`);
+                console.log(`Rotten Tomatoes Rating: ${RTRating}`);
+                console.log(`Language: ${language}`);
+                console.log(`Country: ${country}`);
+                console.log('~~~~~~~~~~~~~~~~~~~~');
             }
           );
     }
