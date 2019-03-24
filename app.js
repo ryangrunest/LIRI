@@ -19,13 +19,35 @@ const spotify = new Spotify(keys.spotify);
 
 
 
+
+
 // LIRI will take following commands:
 
 
 // node liri.js concert-this <artist/band name here>
-// search bandsintown api for artist events api
-// renders to the terminal:
-// name of venue, venue location, date of event
+if (call === 'concert-this') {
+    let queryURL = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id="  + keys.bandsInTown.app_id;
+    console.log('~~~~~~~~~~~~~~~~~~~~');
+    console.log('Searching For Events...');
+    // search bandsintown api for artist events api
+    axios.get(queryURL).then(function  (data) {
+        console.log(data.data);
+        const returned = data.data;
+        for (var i = 0; i < returned.length; i++) {
+            const venue = returned[i].venue.name;
+            const location = returned[i].venue.city;
+            const date = returned[i].datetime;
+            console.log('~~~~~~~~~~~~~~~~~~~~');
+            console.log(`Venue: ${venue}`);
+            console.log(`City of Event: ${location}`);
+            console.log(`Date of Event: ${moment(date).format('dddd, MMMM Do YYYY')}`);
+            console.log('~~~~~~~~~~~~~~~~~~~~');
+        }
+    }).catch(err=>console.log(err));
+    
+    
+}
+
 
 
 
