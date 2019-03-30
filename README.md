@@ -1,6 +1,9 @@
 # LIRI
 ## Node App - Language Interpretation &amp; Recognition Interface
 
+## Example of ways to use the app
+![Image of Responses](./screenshot.png)
+
 
 ### Introduction
 LIRI is like SIRI, except not at all.  It is a command line node app that takes in parameters and outputs data.

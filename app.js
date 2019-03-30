@@ -85,7 +85,7 @@ function callMovie() {
             // Title  of the movie,  year released, imdb rating, rotten tomatoes  rating, country produced
             // language of the movie, plot, actors in movie
             function(response) {
-                console.log(response.data);
+                // console.log(response.data);
                 const title = response.data.Title;
                 const year = response.data.Released;
                 const IMDBRating = response.data.imdbRating;
