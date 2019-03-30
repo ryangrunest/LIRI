@@ -3,8 +3,17 @@ require('dotenv').config();
 // store program to run in variable
 let call = process.argv[2];
 // concatenate all search words together to form one variable
-let searchTerm = process.argv.splice(3, process.argv.length - 1).join();
-searchTerm = searchTerm.replace(/,/g, ' ');
+let searchTerm;
+// File System
+let fs = require('fs');
+
+
+if (process.argv[3] != undefined) {
+    searchTerm = process.argv.splice(3, process.argv.length - 1).join();
+    searchTerm = searchTerm.replace(/,/g, ' '); 
+}
+
+console.log(`search:${searchTerm}`);
 
 // Axios Package from NPM
 const axios = require("axios");
@@ -16,16 +25,7 @@ const Spotify = require('node-spotify-api');
 const keys = require('./keys.js');
 const spotify = new Spotify(keys.spotify);
 
-
-
-
-
-
-// LIRI will take following commands:
-
-
-// node liri.js concert-this <artist/band name here>
-if (call === 'concert-this') {
+function callConcert()  {
     let queryURL = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id="  + keys.bandsInTown.app_id;
     console.log('~~~~~~~~~~~~~~~~~~~~');
     console.log('Searching For Events...');
@@ -45,12 +45,7 @@ if (call === 'concert-this') {
     }).catch(err=>console.log(err));
 }
 
-
-
-
-
-// spotify-this-song <song name here>
-if (call === 'spotify-this-song') {
+function callSpotify() {
     if (searchTerm === undefined) {
         // if no song is provided it will default to 'the sign'  by ace  of base
         searchTerm = 'the Sign';
@@ -73,18 +68,17 @@ if (call === 'spotify-this-song') {
         console.log(`Artist Name: ${artists}`);
         console.log(`Link to Song: ${preview}`);
         console.log('~~~~~~~~~~~~~~~~~~~~');
-    });
-      
+    }); 
 }
 
-
-
-// defaults to Mr. Nobody.
-// movie-this <movie name here>
-if (call === 'movie-this') {
+function callMovie() {
+    if (searchTerm === undefined) {
+        searchTerm = 'mr nobody';
+    }
     let queryUrl = "http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=" + keys.OMDB.API_KEY;
     console.log('~~~~~~~~~~~~~~~~~~~~');
     console.log('Searching For Movie...');
+    
     if (searchTerm != undefined) {
         axios.get(queryUrl).then(
             // outputs  following info:
@@ -115,7 +109,44 @@ if (call === 'movie-this') {
 }
 
 
-// do-what-it-says
+
+
+// LIRI will take following commands:
+
+
+// node liri.js concert-this <artist/band name here>
+if (call === 'concert') {
+    callConcert();
+}
+// spotify-this-song <song name here>
+if (call === 'spotify') {
+    callSpotify();
+}
+// defaults to Mr. Nobody.
+// movie-this <movie name here>
+if (call === 'movie') {
+    callMovie();
+}
+
+
+// do
 // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
 // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
 // Edit the text in random.txt to test out the feature for movie-this and concert-this.
+
+if (call === 'do') {
+    fs.readFile('random.txt', "utf8", function(error, data){ 
+        if (error) {
+            return console.log(error);
+        }
+        let dataArr = data.split(',');
+        searchTerm = dataArr[1];
+        if (dataArr[0] === 'spotify') {
+            callSpotify();
+        } else if (dataArr[0] === 'concert') {
+            callConcert();
+        } else if (dataArr[0] === 'movie') {
+            callMovie();
+        }
+    })
+};
