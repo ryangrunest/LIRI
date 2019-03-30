@@ -85,10 +85,14 @@ function callMovie() {
             // Title  of the movie,  year released, imdb rating, rotten tomatoes  rating, country produced
             // language of the movie, plot, actors in movie
             function(response) {
+                console.log(response.data);
                 const title = response.data.Title;
                 const year = response.data.Released;
                 const IMDBRating = response.data.imdbRating;
-                const RTRating = response.data.Ratings[1].Value;
+                let RTRating = 'No Data Available';
+                if (response.data.Ratings.length > 0)  {
+                    RTRating = response.data.Ratings[0].Value;
+                };
                 const country = response.data.Country;
                 const language = response.data.Language;
                 const plot = response.data.Plot;
@@ -104,7 +108,9 @@ function callMovie() {
                 console.log(`Country: ${country}`);
                 console.log('~~~~~~~~~~~~~~~~~~~~');
             }
-          );
+        ).catch(function (error) {
+            console.log(error);
+          });;
     }
 }
 
